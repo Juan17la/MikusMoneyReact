@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { login } from "../api/authenticationService";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 
 import mikusLoginSticker from "../assets/mikusLoginSticker.png";
 
 export default function Login() {
+  const { login: setAuthUser } = useAuth();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [pin, setPin] = useState("");
@@ -14,7 +18,8 @@ export default function Login() {
 
     try {
       const response = await login(email, pin);
-      window.location.reload();
+      setAuthUser(response.data);
+      navigate("/account");
     } catch (err : any) {
       setError(err.message || 'An unexpected error occurred.');      
       console.error('Login failed:', err);
@@ -54,6 +59,7 @@ export default function Login() {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
               <div
@@ -74,13 +80,14 @@ export default function Login() {
                   placeholder="Pin Code"
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
+                  required
                 />
               </div>
               <div className="flex flex-col gap-2 mb-4 text-sm sm:text-base">
-                <a href="/" className="underline hover:text-accent transition-colors">
+                <a href="/rescue" className="underline text-contrast hover:text-accent transition-colors">
                   Forgot your password?
                 </a>
-                <a href="/" className="underline hover:text-accent transition-colors">
+                <a href="/register" className="underline text-contrast hover:text-accent transition-colors">
                   Create an account
                 </a>
               </div>
