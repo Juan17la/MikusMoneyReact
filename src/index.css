@@ -3,40 +3,76 @@
 @theme {
   /* Color palette using Tailwind 4 theme syntax */
   --color-bg: #0E1B1E;
+  --color-bg-deep: #071011;
   --color-surface-primary: #132C2F;
   --color-surface-secondary: #1B3F43;
   --color-surface-containers: #1F4E52;
 
   --color-accent: #39E6D8;
   --color-accent-weak: #7EEAE1;
+  --color-accent-alpha: #7eeae183;
   --color-muted: #4F7C7A;
   --color-contrast: #E6F7F5;
+  --color-dark: #042221;
+  --color-dark-border: rgba(3,18,18,0.4);
 
-  /* Skeuomorphism shadowing */
+  --color-text-primary: #042221;
+  
+  /* Opacity variants for accent color */
+  --color-accent-10: rgba(57,230,216,0.1);
+  --color-accent-12: rgba(57,230,216,0.12);
+  --color-accent-15: rgba(57,230,216,0.15);
+  --color-accent-20: rgba(57,230,216,0.2);
+  --color-accent-30: rgba(57,230,216,0.3);
+
+  /* Shadow colors */
+  --color-shadow-deep: rgba(2,8,10,0.6);
+  --color-shadow-dark: rgba(2,10,10,0.55);
+  --color-shadow-outer: rgba(3,10,12,0.6);
+  
+  /* White/Black opacity variants */
+  --color-white-1: rgba(255,255,255,0.01);
+  --color-white-2: rgba(255,255,255,0.02);
+  --color-white-3: rgba(255,255,255,0.03);
+  --color-white-4: rgba(255,255,255,0.04);
+  --color-white-8: rgba(255,255,255,0.08);
+  --color-white-10: rgba(255,255,255,0.1);
+  
+  --color-black-8: rgba(0,0,0,0.08);
+  --color-black-10: rgba(0,0,0,0.1);
+  --color-black-12: rgba(0,0,0,0.12);
+  --color-black-15: rgba(0,0,0,0.15);
+  --color-black-20: rgba(0,0,0,0.2);
+  --color-black-30: rgba(0,0,0,0.3);
+  --color-black-35: rgba(0,0,0,0.35);
+  --color-black-40: rgba(0,0,0,0.4);
+  --color-black-50: rgba(0,0,0,0.5);
+  --color-black-60: rgba(0,0,0,0.6);
+
+  /* Skeuomorphism shadows */
   --shadow-inner: 0 6px 18px rgba(2,8,10,0.6) inset;
+  --shadow-inner-soft: 0 2px 6px rgba(0,0,0,0.3);
   --shadow-outer: 0 10px 30px rgba(3,10,12,0.6);
+  --shadow-outer-small: 0 2px 6px rgba(0,0,0,0.5);
   --shadow-highlight: 0 -6px 18px rgba(255,255,255,0.03) inset;
-}
-
-:root{
-  /* Legacy CSS custom properties for backward compatibility */
-  --bg: #0E1B1E;
-  --surface-primary: #132C2F;
-  --surface-secondary: #1B3F43;
-  --surface-containers: #1F4E52;
-
-  --accent: #39E6D8;
-  --accent-weak: #7EEAE1;
-  --muted: #4F7C7A;
-
-  /* Skeuomorphism shadowing */
-  --inner-shadow: 0 6px 18px rgba(2,8,10,0.6) inset;
-  --outer-shadow: 0 10px 30px rgba(3,10,12,0.6);
-  --highlight: 0 -6px 18px rgba(255,255,255,0.03) inset;
+  
+  /* Button shadows */
+  --shadow-button: 0 6px 12px rgba(2,10,10,0.55), 0 2px 0 rgba(255,255,255,0.02) inset;
+  --shadow-button-accent: 0 8px 18px rgba(57,230,216,0.12), 0 2px 0 rgba(255,255,255,0.04) inset;
+  --shadow-card: 0 6px 18px rgba(2,8,10,0.6) inset, 0 6px 16px rgba(0,0,0,0.6);
+  
+  /* Focus shadow */
+  --shadow-focus: 0 6px 18px rgba(2,8,10,0.6) inset, 0 2px 6px rgba(0,0,0,0.3), 0 0 0 3px rgba(57,230,216,0.15);
+  
+  /* Border radius */
+  --radius-xs: 8px;
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
 }
 
 html, body, #root {
-  background: linear-gradient(180deg, var(--bg) 0%, #071011 100%);
+  background: linear-gradient(180deg, var(--color-bg) 0%, #071011 100%);
   height: 100%;
   width: 100%;
   margin: 0;
@@ -44,279 +80,4 @@ html, body, #root {
   font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #E6F7F5;
-}
-
-/* Bank shell - central container */
-.bank-shell{
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
-  border-radius: 16px;
-  padding: 18px;
-  box-shadow: var(--outer-shadow), 0 2px 6px rgba(0,0,0,0.5);
-  border: 1px solid #7eeae183;
-}
-
-.bank-card{
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: var(--inner-shadow), 0 6px 16px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.03);
-}
-
-.portrait-aside{
-  border-radius: 12px;
-  overflow: hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
-  border: 1px solid rgba(255,255,255,0.04);
-}
-
-.portrait-aside img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-.skeu-button{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  padding:10px 14px;
-  border-radius:10px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.1));
-  color: #042221;
-  font-weight:700;
-  box-shadow: 0 6px 12px rgba(2,10,10,0.55), 0 2px 0 rgba(255,255,255,0.02) inset;
-  border: 1px solid rgba(3,18,18,0.4);
-}
-
-.skeu-button.accent{
-  background: linear-gradient(180deg, var(--accent-weak), var(--accent));
-  color: #042221;
-  box-shadow: 0 8px 18px rgba(57,230,216,0.12), 0 2px 0 rgba(255,255,255,0.04) inset;
-}
-
-.transactions-list{
-  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.08));
-  border-radius: 10px;
-  padding: 12px;
-  border: 1px solid rgba(255,255,255,0.03);
-  min-height: 92px;
-}
-
-
-
-/* Responsive tweaks */
-@media (max-width: 768px){
-  .bank-shell{ padding: 12px; border-radius: 12px }
-  .bank-card{ padding: 12px }
-}
-
-/* Accessibility focus */
-.skeu-button:focus{ outline: 3px solid rgba(57,230,216,0.2); outline-offset: 2px }
-
-/* Utility to ensure transaction area can shrink/grow inside flex */
-.flex-fill{ flex: 1 1 auto; min-height: 0 }
-
-/* Input styles - inspired by the skeuomorphic design system */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="tel"],
-input[type="url"],
-input[type="search"],
-input[type="date"],
-input[type="time"],
-input[type="datetime-local"],
-textarea,
-select {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.15));
-  color: #E6F7F5;
-  font-family: inherit;
-  font-size: 14px;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: var(--inner-shadow), 0 2px 6px rgba(0,0,0,0.3);
-  transition: all 0.2s ease;
-  outline: none;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: rgba(230,247,245,0.4);
-  font-style: italic;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: var(--accent);
-  box-shadow: var(--inner-shadow), 
-              0 2px 6px rgba(0,0,0,0.3),
-              0 0 0 3px rgba(57,230,216,0.15);
-  background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.2));
-}
-
-input:disabled,
-textarea:disabled,
-select:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background: linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.3));
-}
-
-/* Textarea specific */
-textarea {
-  min-height: 80px;
-  resize: vertical;
-}
-
-/* Select specific */
-select {
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23E6F7F5' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 36px;
-}
-
-/* Checkbox and radio inputs */
-input[type="checkbox"],
-input[type="radio"] {
-  width: 18px;
-  height: 18px;
-  padding: 0;
-  cursor: pointer;
-  appearance: none;
-  border-radius: 4px;
-  background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.15));
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: var(--inner-shadow);
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-input[type="radio"] {
-  border-radius: 50%;
-}
-
-input[type="checkbox"]:checked,
-input[type="radio"]:checked {
-  background: linear-gradient(180deg, var(--accent-weak), var(--accent));
-  border-color: var(--accent);
-}
-
-input[type="checkbox"]:checked::after {
-  content: '';
-  position: absolute;
-  left: 5px;
-  top: 2px;
-  width: 5px;
-  height: 9px;
-  border: solid #042221;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
-input[type="radio"]:checked::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #042221;
-}
-
-input[type="checkbox"]:focus,
-input[type="radio"]:focus {
-  outline: 3px solid rgba(57,230,216,0.2);
-  outline-offset: 2px;
-}
-
-/* Range input (slider) */
-input[type="range"] {
-  width: 100%;
-  height: 6px;
-  padding: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.15));
-  border-radius: 10px;
-  outline: none;
-  box-shadow: var(--inner-shadow);
-  border: 1px solid rgba(255,255,255,0.08);
-  appearance: none;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: linear-gradient(180deg, var(--accent-weak), var(--accent));
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(57,230,216,0.3);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-input[type="range"]::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: linear-gradient(180deg, var(--accent-weak), var(--accent));
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(57,230,216,0.3);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-/* File input */
-input[type="file"] {
-  padding: 8px;
-  cursor: pointer;
-}
-
-input[type="file"]::file-selector-button {
-  padding: 6px 12px;
-  border-radius: 8px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.1));
-  color: #E6F7F5;
-  font-weight: 600;
-  border: 1px solid rgba(255,255,255,0.08);
-  cursor: pointer;
-  margin-right: 12px;
-  transition: all 0.2s ease;
-}
-
-input[type="file"]::file-selector-button:hover {
-  background: linear-gradient(180deg, var(--accent-weak), var(--accent));
-  color: #042221;
-}
-
-/* Input validation states */
-input:invalid:not(:placeholder-shown),
-textarea:invalid:not(:placeholder-shown),
-select:invalid:not(:placeholder-shown) {
-  border-color: #ff6b6b;
-  box-shadow: var(--inner-shadow), 
-              0 2px 6px rgba(0,0,0,0.3),
-              0 0 0 2px rgba(255,107,107,0.1);
-}
-
-input:valid:not(:placeholder-shown),
-textarea:valid:not(:placeholder-shown),
-select:valid:not(:placeholder-shown) {
-  border-color: var(--accent);
-  box-shadow: var(--inner-shadow), 
-              0 2px 6px rgba(0,0,0,0.3),
-              0 0 0 2px rgba(81,207,102,0.1);
 }
