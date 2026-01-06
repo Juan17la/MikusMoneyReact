@@ -1,12 +1,15 @@
-import { createContext, useContext, useEffect, useState, useMemo, useCallback, useRef } from "react";
+import { createContext, useContext, useState, useMemo, useCallback, useRef, useSyncExternalStore } from "react";
 import type React from "react";
 import axiosInstance from "../api/axiosInstance";
 
-type AuthContextType = {
+type AuthState = {
   isAuthenticated: boolean;
   isLoading: boolean;
   user: any | null;
   error: string | null;
+};
+
+type AuthContextType = AuthState & {
   logout: () => void;
   login: (userData: any) => void;
 };
@@ -20,18 +23,72 @@ const AuthContext = createContext<AuthContextType>({
   login: () => {},
 });
 
+// Singleton auth state - persists across re-renders and strict mode
+let authState: AuthState = {
+  isAuthenticated: false,
+  isLoading: true,
+  user: null,
+  error: null,
+};
+
+let authPromise: Promise<void> | null = null;
+const listeners = new Set<() => void>();
+
+const notifyListeners = () => {
+  listeners.forEach((listener) => listener());
+};
+
+const subscribe = (listener: () => void) => {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+};
+
+const getSnapshot = () => authState;
+
+// Initialize auth check immediately (outside of React lifecycle)
+const initializeAuth = (): Promise<void> => {
+  if (authPromise) return authPromise;
+
+  authPromise = axiosInstance
+    .get("/auth/me")
+    .then((response) => {
+      authState = {
+        isAuthenticated: true,
+        isLoading: false,
+        user: response.data,
+        error: null,
+      };
+    })
+    .catch((err: any) => {
+      authState = {
+        isAuthenticated: false,
+        isLoading: false,
+        user: null,
+        error: err.response?.status === 401 ? null : (err.message || "Authentication failed"),
+      };
+    })
+    .finally(() => {
+      notifyListeners();
+    });
+
+  return authPromise;
+};
+
+// Start auth check immediately when module loads
+initializeAuth();
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }): React.ReactElement => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<any | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  
-  const hasCheckedAuth = useRef(false);
+  // Use useSyncExternalStore for optimal re-renders
+  const currentAuthState = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
   const login = useCallback((userData: any) => {
-    setIsAuthenticated(true);
-    setUser(userData);
-    setError(null);
+    authState = {
+      isAuthenticated: true,
+      isLoading: false,
+      user: userData,
+      error: null,
+    };
+    notifyListeners();
   }, []);
 
   const logout = useCallback(async () => {
@@ -40,38 +97,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }): React
     } catch (err) {
       console.error("Logout error:", err);
     } finally {
-      setIsAuthenticated(false);
-      setUser(null);
-      setError(null);
+      authState = {
+        isAuthenticated: false,
+        isLoading: false,
+        user: null,
+        error: null,
+      };
+      notifyListeners();
     }
   }, []);
 
-  useEffect(() => {
-    if (hasCheckedAuth.current) return;
-    hasCheckedAuth.current = true;
-
-    const checkAuth = async () => {
-      try {
-        const response = await axiosInstance.get("/auth/me");
-        setIsAuthenticated(true);
-        setUser(response.data);
-        setError(null);
-      } catch (err: any) {
-        setIsAuthenticated(false);
-        setUser(null);
-        setError(err.message || "Authentication failed");
-      } finally {
-        // loading solo pasa a false aquí
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []); // array vacío solo al montar
-
   const value = useMemo(
-    () => ({ isAuthenticated, isLoading, user, error, logout, login }),
-    [isAuthenticated, isLoading, user, error, logout, login]
+    () => ({ ...currentAuthState, logout, login }),
+    [currentAuthState, logout, login]
   );
 
   return (

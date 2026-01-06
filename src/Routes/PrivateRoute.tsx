@@ -4,16 +4,9 @@ import type { JSX } from "react";
 import { memo } from "react";
 
 export const PrivateRoute = memo(({ children }: { children: JSX.Element }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-  if (isLoading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <div>Loading...</div>
-      </div>
-    );
-  }
-
+  // Loading is handled at App level, so we only check authentication
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 });
 
