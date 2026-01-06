@@ -1,20 +1,17 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "./axiosInstance.ts";
 
-export async function login(email:string, pin:string) {
-  try {
-    const requestBody = {
-      email : email,
-      pinCode : pin
-    }
+// LOGIN
+export async function login(email: string, pin: string) {
+  const requestBody = {
+    email,
+    pinCode: pin,
+  };
 
-    const response = await axiosInstance.post('/auth/login', requestBody);
-    return { data: response.data, message: 'Login successful' };
-  } catch (error) {
-    console.error('Axios error:', error);
-    return {data: null, message: 'Login failed'}; 
-  }
+  const response = await axiosInstance.post("/auth/login", requestBody);
+  return response.data;
 }
 
+// REGISTER
 export async function register(
   name: string,
   lastName: string,
@@ -26,33 +23,24 @@ export async function register(
   password: string,
   passwordConfirmation: string
 ) {
-  try {
-    const requestBody = {
-      name,
-      lastName,
-      birthDate,
-      email,
-      phoneNumber,
-      pinCode: pin,
-      pinCodeConfirmation: pinConfirmation,
-      password,
-      passwordConfirmation
-    }
+  const requestBody = {
+    name,
+    lastName,
+    birthDate,
+    email,
+    phoneNumber,
+    password,
+    passwordConfirmation,
+    pinCode: pin,
+    pinCodeConfirmation: pinConfirmation,
+  };
 
-    const response = await axiosInstance.post('/auth/register', requestBody);
-    return { data: response.data, message: 'Register successful' };
-  } catch (error: any) {
-    console.error('Axios error:', error);
-    throw new Error(error.response?.data?.message || 'Register failed');
-  }
+  const response = await axiosInstance.post("/auth/register", requestBody);
+  return response.data;
 }
 
+// LOGOUT
 export async function logout() {
-  try {
-    const response = await axiosInstance.post('/auth/logout');
-    return { data: response.data, message: 'Logout successful' };
-  } catch (error) {
-    console.error('Axios error:', error);
-    return {data: null, message: 'Logout failed'}; 
-  }
+  const response = await axiosInstance.post("/auth/logout");
+  return response.data;
 }

@@ -12,19 +12,26 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [pin, setPin] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSumit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setError("");
 
     try {
       const response = await login(email, pin);
       setAuthUser(response.data);
       navigate("/account");
-    } catch (err : any) {
-      setError(err.message || 'An unexpected error occurred.');      
-      console.error('Login failed:', err);
+    } catch (err: any) {
+      const backendMessage =
+        err?.response?.data?.message;
+
+      setError(backendMessage);
+      setIsSubmitting(false);
+      console.error("Login failed:", err);
     }
-  }
+  };
 
   return (
     <>
@@ -41,10 +48,7 @@ export default function Login() {
           <span className="text-12 text-red-400">{error}</span>
           <div className="w-full h-full flex flex-col gap-2 sm:gap-4 p-4 sm:p-6 md:p-8">
             <form onSubmit={handleSumit} className="w-full">
-              <div
-                className="w-full gap-2 flex flex-col mb-4"
-                id="form-group"
-              >
+              <div className="w-full gap-2 flex flex-col mb-4" id="form-group">
                 <label
                   htmlFor="input-email"
                   className="text-contrast font-semibold text-sm sm:text-base"
@@ -62,10 +66,7 @@ export default function Login() {
                   required
                 />
               </div>
-              <div
-                className="w-full gap-2 flex flex-col mb-4"
-                id="form-group"
-              >
+              <div className="w-full gap-2 flex flex-col mb-4" id="form-group">
                 <label
                   htmlFor="input-password"
                   className="text-contrast font-semibold text-sm sm:text-base"
@@ -84,16 +85,27 @@ export default function Login() {
                 />
               </div>
               <div className="flex flex-col gap-2 mb-4 text-sm sm:text-base">
-                <a href="/rescue" className="underline text-contrast hover:text-accent transition-colors">
+                <a
+                  href="/rescue"
+                  className="underline text-contrast hover:text-accent transition-colors"
+                >
                   Forgot your password?
                 </a>
-                <a href="/register" className="underline text-contrast hover:text-accent transition-colors">
+                <a
+                  href="/register"
+                  className="underline text-contrast hover:text-accent transition-colors"
+                >
                   Create an account
                 </a>
               </div>
               <button
                 type="submit"
-                className="w-full text-center font-semibold sm:py-3 rounded-lg my-4 text-sm sm:text-base inline-flex items-center justify-center gap-2 px-2.5 py-3.5 transition-all duration-200 bg-linear-to-b from-accent-weak/40 to-accent/70 text-dark shadow-button-accent border border-dark-border focus:outline-3 focus:outline-accent-20 focus:outline-offset-2 hover:from-accent hover:to-accent-strong hover:shadow-button-accent-hover active:from-accent-active active:to-accent-strong-active active:shadow-button-accent-active"
+                disabled={isSubmitting}
+                className={`w-full text-center font-semibold sm:py-3 rounded-xs my-4 text-sm inline-flex items-center justify-center gap-2 px-3.5 py-2.5 transition-all duration-200 ${
+                  isSubmitting
+                    ? "bg-gray-400 text-gray-600 cursor-not-allowed opacity-60"
+                    : "bg-linear-to-b from-accent-weak/80 to-accent/70 text-dark shadow-button-accent border border-dark-border hover:from-accent cursor-pointer"
+                } focus:outline-3 focus:outline-accent-20 focus:outline-offset-2`}
               >
                 Login
               </button>
@@ -104,5 +116,3 @@ export default function Login() {
     </>
   );
 }
-
-

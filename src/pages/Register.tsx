@@ -17,43 +17,64 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPin, setShowPin] = useState(false);
   const [error, setError] = useState("");
-    
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { login: setAuthUser } = useAuth();
   const navigate = useNavigate();
 
+  const handleNext = () => {
+    setError("");
+    setStep(2);
+  };
+
   const handleSumit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
 
-    if (step === 1) {
-      setStep(2);
-      return;
-    }
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setError("");
 
     if (pin !== pinConfirmation) {
       setError("PIN codes do not match");
+      setIsSubmitting(false);
       return;
     }
 
     if (password !== passwordConfirmation) {
       setError("Passwords do not match");
+      setIsSubmitting(false);
       return;
     }
 
     try {
-        const response = await register(name, lastName, birthDate, email, phoneNumber, pin, pinConfirmation, password, passwordConfirmation);
-        setAuthUser(response.data);
-        navigate("/account");
-    } catch (error : any) {
-        setError(error.message || 'An unexpected error occurred.');      
-        console.error('Register failed:', error);
+      const response = await register(
+        name,
+        lastName,
+        birthDate,
+        email,
+        phoneNumber,
+        pin,
+        pinConfirmation,
+        password,
+        passwordConfirmation
+      );
+      setAuthUser(response.data);
+      navigate("/account");
+    } catch (err: any) {
+      const backendMessage = err?.response?.data?.message;
+
+      setError(backendMessage);
+      setIsSubmitting(false);
+      console.error("Login failed:", err);
     }
-  }
+  };
 
   const goBackToStep1 = () => {
     setStep(1);
     setError("");
-  }
+    setIsSubmitting(false);
+  };
 
   return (
     <>
@@ -67,18 +88,19 @@ export default function Register() {
             alt="sticker"
             className="w-24 sm:w-40 md:w-45 object-contain absolute -top-12 -right-6 sm:-top-20 sm:-right-16 md:-top-25 md:-right-20"
           />
-          <div className="text-sm text-contrast/60 mb-4">
-            Step {step} of 2
-          </div>
+          <div className="text-sm text-contrast/60 mb-4">Step {step} of 2</div>
           <span className="text-12 text-red-400">{error}</span>
           <div className="w-full h-full flex flex-col gap-2 sm:gap-4 p-4 sm:p-6 md:p-8">
             <form
-              onSubmit={handleSumit}
+              onSubmit={step === 2 ? handleSumit : (e) => e.preventDefault()}
               className="w-full grid grid-cols-1 md:grid-cols-2 gap-4"
             >
               {step === 1 ? (
                 <>
-                  <div className="w-full gap-2 flex flex-col mb-4" id="form-group">
+                  <div
+                    className="w-full gap-2 flex flex-col mb-4"
+                    id="form-group"
+                  >
                     <label
                       htmlFor="input-name"
                       className="text-contrast font-semibold text-sm sm:text-base"
@@ -93,11 +115,20 @@ export default function Register() {
                       placeholder="Name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleNext();
+                        }
+                      }}
                       required
                     />
                   </div>
 
-                  <div className="w-full gap-2 flex flex-col mb-4" id="form-group">
+                  <div
+                    className="w-full gap-2 flex flex-col mb-4"
+                    id="form-group"
+                  >
                     <label
                       htmlFor="input-lastname"
                       className="text-contrast font-semibold text-sm sm:text-base"
@@ -112,11 +143,20 @@ export default function Register() {
                       placeholder="Last Name"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleNext();
+                        }
+                      }}
                       required
                     />
                   </div>
 
-                  <div className="w-full gap-2 flex flex-col mb-4" id="form-group">
+                  <div
+                    className="w-full gap-2 flex flex-col mb-4"
+                    id="form-group"
+                  >
                     <label
                       htmlFor="input-birthdate"
                       className="text-contrast font-semibold text-sm sm:text-base"
@@ -131,11 +171,20 @@ export default function Register() {
                       placeholder="Birth Date"
                       value={birthDate}
                       onChange={(e) => setBirthDate(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleNext();
+                        }
+                      }}
                       required
                     />
                   </div>
 
-                  <div className="w-full gap-2 flex flex-col mb-4" id="form-group">
+                  <div
+                    className="w-full gap-2 flex flex-col mb-4"
+                    id="form-group"
+                  >
                     <label
                       htmlFor="input-email"
                       className="text-contrast font-semibold text-sm sm:text-base"
@@ -150,11 +199,20 @@ export default function Register() {
                       placeholder="Email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleNext();
+                        }
+                      }}
                       required
                     />
                   </div>
 
-                  <div className="w-full gap-2 flex flex-col mb-4 md:col-span-2" id="form-group">
+                  <div
+                    className="w-full gap-2 flex flex-col mb-4 md:col-span-2"
+                    id="form-group"
+                  >
                     <label
                       htmlFor="input-phone"
                       className="text-contrast font-semibold text-sm sm:text-base"
@@ -170,13 +228,22 @@ export default function Register() {
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
                       pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleNext();
+                        }
+                      }}
                       required
                     />
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="w-full gap-2 flex flex-col mb-4 md:col-span-2" id="form-group">
+                  <div
+                    className="w-full gap-2 flex flex-col mb-4 md:col-span-2"
+                    id="form-group"
+                  >
                     <label
                       htmlFor="input-pin"
                       className="text-contrast font-semibold text-sm sm:text-base"
@@ -204,7 +271,10 @@ export default function Register() {
                     </div>
                   </div>
 
-                  <div className="w-full gap-2 flex flex-col mb-4 md:col-span-2" id="form-group">
+                  <div
+                    className="w-full gap-2 flex flex-col mb-4 md:col-span-2"
+                    id="form-group"
+                  >
                     <label
                       htmlFor="input-pin-confirm"
                       className="text-contrast font-semibold text-sm sm:text-base"
@@ -232,7 +302,10 @@ export default function Register() {
                     </div>
                   </div>
 
-                  <div className="w-full gap-2 flex flex-col mb-4 md:col-span-2" id="form-group">
+                  <div
+                    className="w-full gap-2 flex flex-col mb-4 md:col-span-2"
+                    id="form-group"
+                  >
                     <label
                       htmlFor="input-password"
                       className="text-contrast font-semibold text-sm sm:text-base"
@@ -260,7 +333,10 @@ export default function Register() {
                     </div>
                   </div>
 
-                  <div className="w-full gap-2 flex flex-col mb-4 md:col-span-2" id="form-group">
+                  <div
+                    className="w-full gap-2 flex flex-col mb-4 md:col-span-2"
+                    id="form-group"
+                  >
                     <label
                       htmlFor="input-password-confirm"
                       className="text-contrast font-semibold text-sm sm:text-base"
@@ -275,7 +351,9 @@ export default function Register() {
                         id="input-password-confirm"
                         placeholder="Confirm Password"
                         value={passwordConfirmation}
-                        onChange={(e) => setPasswordConfirmation(e.target.value)}
+                        onChange={(e) =>
+                          setPasswordConfirmation(e.target.value)
+                        }
                         required
                       />
                       <button
@@ -289,25 +367,51 @@ export default function Register() {
                   </div>
                 </>
               )}
+              <div className="flex flex-col gap-2 text-sm sm:text-base md:flex-row md:col-span-2">
+                {/* STEP 1 */}
+                {step === 1 && (
+                  <>
+                    <a
+                      href="/account"
+                      className="w-full text-center sm:py-3 rounded-xs my-4 text-sm inline-flex items-center justify-center gap-2 px-3.5 py-2.5 transition-all duration-200 bg-linear-to-b from-red-700/80 to-red-600/70 text-contrast font-bold shadow-red-500 border border-dark-border hover:from-red-600 cursor-pointer focus:outline-3 focus:outline-red-500 focus:outline-offset-2"
+                    >
+                      Cancel
+                    </a>
+                    <button
+                      type="button"
+                      onClick={handleNext}
+                      className="w-full text-center font-semibold sm:py-3 rounded-xs my-4 text-sm inline-flex items-center justify-center gap-2 px-3.5 py-2.5 transition-all duration-200 focus:outline-3 bg-linear-to-b from-accent-weak/80 to-accent/70 text-dark shadow-button-accent border border-dark-border hover:from-accent cursor-pointer"
+                    >
+                      Next
+                    </button>
+                  </>
+                )}
+
+                {/* STEP  */}
+                {step === 2 && (
+                  <>
+                    <button
+                      type="button"
+                      className="w-full text-center font-semibold sm:py-3 rounded-xs my-4 text-sm inline-flex items-center justify-center gap-2 px-3.5 py-2.5 transition-all duration-200 focus:outline-3 bg-linear-to-b from-accent-weak/80 to-accent/70 text-dark shadow-button-accent border border-dark-border hover:from-accent cursor-pointer"
+                      onClick={goBackToStep1}
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={step === 2 && isSubmitting}
+                      className={`w-full text-center font-semibold sm:py-3 rounded-xs my-4 text-sm inline-flex items-center justify-center gap-2 px-3.5 py-2.5 transition-all duration-200 ${
+                        step === 2 && isSubmitting
+                          ? "bg-gray-400 text-gray-600 cursor-not-allowed opacity-60"
+                          : "bg-linear-to-b from-accent-weak/80 to-accent/70 text-dark shadow-button-accent border border-dark-border hover:from-accent cursor-pointer focus:outline-3 focus:outline-accent-20 focus:outline-offset-2"
+                      }`}
+                    >
+                      {isSubmitting ? "Processing..." : "Register"}
+                    </button>
+                  </>
+                )}
+              </div>
             </form>
-            <div className="flex flex-col gap-2 text-sm sm:text-base md:flex-row">
-              {step === 2 && (
-                <button
-                  type="button"
-                  className="w-full text-center font-semibold sm:py-3 rounded-lg my-4 text-sm sm:text-base inline-flex items-center justify-center gap-2 px-2.5 py-3.5 transition-all duration-200 bg-linear-to-b from-accent-weak/40 to-accent/70 text-dark shadow-button-accent border border-dark-border focus:outline-3 focus:outline-accent-20 focus:outline-offset-2 hover:from-accent hover:to-accent-strong hover:shadow-button-accent-hover active:from-accent-active active:to-accent-strong-active active:shadow-button-accent-active"
-                  onClick={goBackToStep1}
-                >
-                  Back
-                </button>
-              )}
-              <button
-                type="submit"
-                className="w-full text-center font-semibold sm:py-3 rounded-lg my-4 text-sm sm:text-base inline-flex items-center justify-center gap-2 px-2.5 py-3.5 transition-all duration-200 bg-linear-to-b from-accent-weak/40 to-accent/70 text-dark shadow-button-accent border border-dark-border focus:outline-3 focus:outline-accent-20 focus:outline-offset-2 hover:from-accent hover:to-accent-strong hover:shadow-button-accent-hover active:from-accent-active active:to-accent-strong-active active:shadow-button-accent-active"
-                onClick={handleSumit}
-              >
-                {step === 1 ? "Next" : "Register"}
-              </button>
-            </div>
           </div>
         </div>
       </div>
