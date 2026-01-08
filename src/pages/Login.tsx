@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { login } from "../api/authenticationService";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 
 import mikusLoginSticker from "../assets/mikusLoginSticker.png";
 
 export default function Login() {
-  const { login: setAuthUser } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -20,8 +19,7 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await login(email, pin);
-      setAuthUser(response.data);
+      await login(email, pin);
       navigate("/account");
     } catch (err: any) {
       const backendMessage =

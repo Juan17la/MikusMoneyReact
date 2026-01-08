@@ -1,14 +1,18 @@
-import { logout } from "../api/authenticationService";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 
 type LogoutButtonProps = {
   className?: string;
 }
 
 export default function LogoutButton({ className }: LogoutButtonProps) {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
   const logoutOnClick = async () => {
     try {
-      const response = await logout();
-      window.location.reload();
+      await logout();
+      navigate("/login");
     } catch (error) {
       console.error("Logout failed:", error);
     }
