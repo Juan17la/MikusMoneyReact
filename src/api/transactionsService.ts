@@ -31,7 +31,7 @@ export function transfer(amount: number, receiverPublicCode: string, pinCode: st
         receiverPublicCode, 
         pinCode,
     }
-    return axiosInstance.post("/transactions/transfer", requestBody, {
+    return axiosInstance.post("/transactions/send", requestBody, {
         headers: {
             'Idempotency-Key': crypto.randomUUID(),
         }
