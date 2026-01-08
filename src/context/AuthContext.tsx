@@ -1,122 +1,132 @@
-import { createContext, useContext, useState, useMemo, useCallback, useRef, useSyncExternalStore } from "react";
-import type React from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
+import type { ReactNode } from "react";
 import axiosInstance from "../api/axiosInstance";
 
-type AuthState = {
+// Tipos para el usuario
+interface User {
+  id: number;
+  name: string;
+  lastName: string;
+  birthDate: string;
+  publicCode: string;
+}
+
+// Tipos para el contexto
+interface AuthContextType {
+  user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  user: any | null;
-  error: string | null;
-};
+  login: (email: string, pin: string) => Promise<void>;
+  logout: () => Promise<void>;
+  refreshAuth: () => Promise<void>;
+}
 
-type AuthContextType = AuthState & {
-  logout: () => void;
-  login: (userData: any) => void;
-};
+// Crear el contexto
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const AuthContext = createContext<AuthContextType>({
-  isAuthenticated: false,
-  isLoading: true,
-  user: null,
-  error: null,
-  logout: () => {},
-  login: () => {},
-});
+// Provider del contexto
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-// Singleton auth state - persists across re-renders and strict mode
-let authState: AuthState = {
-  isAuthenticated: false,
-  isLoading: true,
-  user: null,
-  error: null,
-};
-
-let authPromise: Promise<void> | null = null;
-const listeners = new Set<() => void>();
-
-const notifyListeners = () => {
-  listeners.forEach((listener) => listener());
-};
-
-const subscribe = (listener: () => void) => {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
-};
-
-const getSnapshot = () => authState;
-
-// Initialize auth check immediately (outside of React lifecycle)
-const initializeAuth = (): Promise<void> => {
-  if (authPromise) return authPromise;
-
-  authPromise = axiosInstance
-    .get("/auth/me")
-    .then((response) => {
-      authState = {
-        isAuthenticated: true,
-        isLoading: false,
-        user: response.data,
-        error: null,
-      };
-    })
-    .catch((err: any) => {
-      authState = {
-        isAuthenticated: false,
-        isLoading: false,
-        user: null,
-        error: err.response?.status === 401 ? null : (err.message || "Authentication failed"),
-      };
-    })
-    .finally(() => {
-      notifyListeners();
-    });
-
-  return authPromise;
-};
-
-// Start auth check immediately when module loads
-initializeAuth();
-
-export const AuthProvider = ({ children }: { children: React.ReactNode }): React.ReactElement => {
-  // Use useSyncExternalStore for optimal re-renders
-  const currentAuthState = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
-
-  const login = useCallback((userData: any) => {
-    authState = {
-      isAuthenticated: true,
-      isLoading: false,
-      user: userData,
-      error: null,
-    };
-    notifyListeners();
-  }, []);
-
-  const logout = useCallback(async () => {
+  // Verificar autenticación al montar el componente (solo una vez)
+  const checkAuth = useCallback(async () => {
     try {
-      await axiosInstance.post("/auth/logout");
-    } catch (err) {
-      console.error("Logout error:", err);
+      // Intentar obtener información del usuario actual
+      const response = await axiosInstance.get("/auth/me");
+      
+      if (response.data) {
+        setUser({
+          id: response.data.id,
+          name: response.data.name,
+          lastName: response.data.lastName,
+          birthDate: response.data.birthDate,
+          publicCode: response.data.publicCode,
+        });
+      }
+    } catch {
+      // Si falla, el usuario no está autenticado
+      setUser(null);
     } finally {
-      authState = {
-        isAuthenticated: false,
-        isLoading: false,
-        user: null,
-        error: null,
-      };
-      notifyListeners();
+      setIsLoading(false);
     }
   }, []);
 
-  const value = useMemo(
-    () => ({ ...currentAuthState, logout, login }),
-    [currentAuthState, logout, login]
+  // Verificar auth solo al montar el provider
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  // Función de login
+  const login = useCallback(async (email: string, pin: string) => {
+    const requestBody = {
+      email,
+      pinCode: pin,
+    };
+
+    const response = await axiosInstance.post("/auth/login", requestBody);
+    
+    // Después del login exitoso, guardar la info del usuario
+    if (response.data) {
+      setUser({
+        id: response.data.id,
+        name: response.data.name,
+        lastName: response.data.lastName,
+        birthDate: response.data.birthDate,
+        publicCode: response.data.publicCode,
+      });
+    }
+  }, []);
+
+  // Función de logout
+  const logout = useCallback(async () => {
+    await axiosInstance.post("/auth/logout");
+    setUser(null);
+  }, []);
+
+  // Función para refrescar la autenticación manualmente
+  const refreshAuth = useCallback(async () => {
+    setIsLoading(true);
+    await checkAuth();
+  }, [checkAuth]);
+
+  // Calcular isAuthenticated basado en si hay usuario
+  const isAuthenticated = user !== null;
+
+  // Memoizar el valor del contexto para evitar re-renders innecesarios
+  const contextValue = useMemo<AuthContextType>(
+    () => ({
+      user,
+      isAuthenticated,
+      isLoading,
+      login,
+      logout,
+      refreshAuth,
+    }),
+    [user, isAuthenticated, isLoading, login, logout, refreshAuth]
   );
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => useContext(AuthContext);
+// Hook para usar el contexto
+export function useAuth(): AuthContextType {
+  const context = useContext(AuthContext);
+  
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  
+  return context;
+}
