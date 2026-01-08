@@ -12,7 +12,7 @@ function NavItem({ itemLink, itemName, active }: navItemProps) {
   return (
     <a
       href={itemLink}
-      className={`rounded-t-xs shadow-outer border border-accent-alpha border-b-0 px-4 py-1 transition-colors duration-200 text-contrast font-semibold text-center ${
+      className={`rounded-t-xs shadow-outer border border-accent-alpha border-b-0 px-2 sm:px-4 py-1 transition-colors duration-200 text-contrast font-semibold text-center text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis flex items-center justify-center ${
         active
           ? "bg-linear-to-b from-accent-weak/40 to-accent/40 hover:from-white-2 hover:to-black-8"
           : "bg-linear-to-b from-white-2 to-black-8 hover:from-accent-weak/40 hover:to-accent/40"
