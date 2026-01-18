@@ -1,11 +1,11 @@
-import mikuNotfoundSticker from "../assets/mikusNotFound.png";
+import mikusNotFound from "../assets/mikusNotFound.png";
 
 export default function TransactionsNotFoundWidget() {
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full h-full">
         <img
-          src={mikuNotfoundSticker}
+          src={mikusNotFound}
           alt="sticker here"
           className="w-25 h-25 mb-4"
           loading="lazy"
