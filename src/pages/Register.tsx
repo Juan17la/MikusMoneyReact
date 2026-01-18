@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import { register } from "../api/authenticationService";
+import mikusLoginSticker from "../assets/mikusLoginSticker.png";
 
 export default function Register() {
   const [step, setStep] = useState<1 | 2>(1);
@@ -66,7 +67,6 @@ export default function Register() {
 
       setError(backendMessage);
       setIsSubmitting(false);
-      console.error("Login failed:", err);
     }
   };
 
@@ -84,7 +84,7 @@ export default function Register() {
             Hi Miku!
           </h1>
           <img
-            src=""
+            src={mikusLoginSticker}
             alt="sticker"
             className="w-24 sm:w-40 md:w-45 object-contain absolute -top-12 -right-6 sm:-top-20 sm:-right-16 md:-top-25 md:-right-20"
           />

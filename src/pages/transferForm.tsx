@@ -36,7 +36,6 @@ export default function WithdrawForm() {
 
       setError(backendMessage);
       setIsSubmitting(false);
-      console.error("Transfer failed:", err);
     }
   };
 

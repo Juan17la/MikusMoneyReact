@@ -27,7 +27,6 @@ export default function Login() {
 
       setError(backendMessage);
       setIsSubmitting(false);
-      console.error("Login failed:", err);
     }
   };
 
