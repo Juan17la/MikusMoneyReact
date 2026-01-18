@@ -12,9 +12,9 @@ export default function LogoutButton({ className }: LogoutButtonProps) {
   const logoutOnClick = async () => {
     try {
       await logout();
-      navigate("/login");
+      navigate("/auth/login");
     } catch (error) {
-      console.error("Logout failed:", error);
+      throw new Error("Logout failed");
     }
   };
 

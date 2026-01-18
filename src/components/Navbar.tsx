@@ -31,9 +31,7 @@ export function Navbar() {
   const navItems: navItemProps[] = [
     { itemName: "Account", itemLink: "/account" },
     { itemName: "Transactions", itemLink: "/transactions" },
-    { itemName: "Savings Pig", itemLink: "/savings-pig" },
-    { itemName: "Loans", itemLink: "/loans" },
-    { itemName: "Profile", itemLink: "/profile" },
+    { itemName: "Savings", itemLink: "/savings" },
   ];
 
   const currentPage = navItems.find((item) => item.itemLink === location.pathname);
