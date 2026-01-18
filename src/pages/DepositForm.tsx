@@ -35,7 +35,6 @@ export default function DepositForm() {
 
       setError(backendMessage);
       setIsSubmitting(false);
-      console.error("Deposit failed:", err);
     }
   };
 

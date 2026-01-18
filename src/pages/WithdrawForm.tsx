@@ -35,7 +35,6 @@ export default function WithdrawForm() {
 
       setError(backendMessage);
       setIsSubmitting(false);
-      console.error("Deposit failed:", err);
     }
   };
 
