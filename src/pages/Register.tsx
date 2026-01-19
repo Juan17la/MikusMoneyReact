@@ -49,7 +49,7 @@ export default function Register() {
     }
 
     try {
-      const response = await register(
+      await register(
         name,
         lastName,
         birthDate,
@@ -60,7 +60,7 @@ export default function Register() {
         password,
         passwordConfirmation
       );
-      setAuthUser(response.data);
+      await setAuthUser(email, pin);
       navigate("/account");
     } catch (err: any) {
       const backendMessage = err?.response?.data?.message;

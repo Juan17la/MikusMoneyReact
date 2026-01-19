@@ -29,7 +29,7 @@ export default function SavingsCreateForm() {
     setError("");
 
     try {
-      const response = await createSavingsPig(name, goal);
+      await createSavingsPig(name, goal);
       navigate("/savings");
     } catch (err: any) {
       const backendMessage = err?.response?.data?.message;

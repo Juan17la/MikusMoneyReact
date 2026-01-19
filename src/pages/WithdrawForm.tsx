@@ -28,7 +28,7 @@ export default function WithdrawForm() {
     setError("");
 
     try {
-      const response = await withdraw(amount, pin);
+      await withdraw(amount, pin);
       navigate("/account");
     } catch (err: any) {
       const backendMessage = err?.response?.data?.message;

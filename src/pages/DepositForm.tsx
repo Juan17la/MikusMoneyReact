@@ -28,7 +28,7 @@ export default function DepositForm() {
     setError("");
 
     try {
-      const response = await deposit(amount, pin);
+      await deposit(amount, pin);
       navigate("/account");
     } catch (err: any) {
       const backendMessage = err?.response?.data?.message;

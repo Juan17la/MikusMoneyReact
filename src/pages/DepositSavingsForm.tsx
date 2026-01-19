@@ -76,7 +76,7 @@ export default function DepositSavingsForm() {
     setError("");
 
     try {
-      const response = await saveSavingPigs(amount, pin, savingPig.id);
+      await saveSavingPigs(amount, pin, savingPig.id);
       navigate("/savings");
     } catch (err: any) {
       const backendMessage = err?.response?.data?.message;

@@ -29,7 +29,7 @@ export default function WithdrawForm() {
     setError("");
 
     try {
-      const response = await transfer(amount, receiver, pin);
+      await transfer(amount, receiver, pin);
       navigate("/account");
     } catch (err: any) {
       const backendMessage = err?.response?.data?.message;

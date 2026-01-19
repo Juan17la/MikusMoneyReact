@@ -9,7 +9,7 @@ import Error404 from './pages/404.tsx'
 
 import DepositForm from './pages/DepositForm.tsx'
 import WithdrawForm from './pages/WithdrawForm.tsx'
-import TransferForm from './pages/TransferForm.tsx'
+import TransferForm from './pages/transferForm.tsx'
 import Transactions from './pages/Transactions.tsx'
 import Savings from './pages/Savings.tsx'
 import SavingsCreateForm from './pages/SavingsCreateForm.tsx'
