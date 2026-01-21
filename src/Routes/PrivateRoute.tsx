@@ -7,7 +7,7 @@ export const PrivateRoute = memo(({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
 
   // Loading is handled at App level, so we only check authentication
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  return isAuthenticated ? children : <Navigate to="/auth/login" replace />;
 });
 
 PrivateRoute.displayName = 'PrivateRoute';

@@ -14,6 +14,7 @@ import Transactions from './pages/Transactions.tsx'
 import Savings from './pages/Savings.tsx'
 import SavingsCreateForm from './pages/SavingsCreateForm.tsx'
 import DepositSavingsForm from './pages/DepositSavingsForm.tsx'
+import LandingPage from './pages/LandingPage.tsx'
 
 import { PrivateRoute } from './Routes/PrivateRoute.tsx'
 import { PublicOnlyRoute } from './Routes/PublicOnlyRoute.tsx'
@@ -41,7 +42,7 @@ function App() {
       <Route path='/savings/:id/deposit' element={<PrivateRoute><DepositSavingsForm /></PrivateRoute>} />
       
       {/* LANDING */}
-      <Route path='/' element={<PublicOnlyRoute><h1>Welcome to Mikus Money!</h1></PublicOnlyRoute>} />
+      <Route path='/' element={<PublicOnlyRoute><LandingPage /></PublicOnlyRoute>} />
       
       {/* ERROR 404 NOT FOUND */}
       <Route path='*' element={<Error404 />} />
