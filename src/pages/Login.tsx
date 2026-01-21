@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
+import { Eye, EyeOff } from "lucide-react";
 
 import mikusLoginSticker from "../assets/mikusLoginSticker.png";
 
@@ -10,6 +11,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [pin, setPin] = useState("");
+  const [showPin, setShowPin] = useState(false);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -70,26 +72,35 @@ export default function Login() {
                 >
                   Pin Code:
                 </label>
-                <input
-                  className="w-full px-3.5 py-2.5 rounded-sm bg-linear-to-b from-black-30 to-black-15 text-contrast font-[inherit] text-sm border border-white-8 shadow-inner transition-all duration-200 outline-none focus:border-accent focus:shadow-focus focus:bg-linear-to-b focus:from-black-35 focus:to-black-20 placeholder:text-contrast/40 placeholder:italic sm:text-base"
-                  type="password"
-                  name="input-pin"
-                  id="input-pin"
-                  placeholder="Pin Code"
-                  value={pin}
-                  onChange={(e) => setPin(e.target.value)}
-                  required
-                />
+                <div className="relative flex items-center">
+                  <input
+                    className="w-full px-3.5 py-2.5 rounded-sm bg-linear-to-b from-black-30 to-black-15 text-contrast font-[inherit] text-sm border border-white-8 shadow-inner transition-all duration-200 outline-none focus:border-accent focus:shadow-focus focus:bg-linear-to-b focus:from-black-35 focus:to-black-20 placeholder:text-contrast/40 placeholder:italic sm:text-base pr-10"
+                    type={showPin ? "text" : "password"}
+                    name="input-pin"
+                    id="input-pin"
+                    placeholder="Pin Code"
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 text-contrast/60 hover:text-contrast transition-colors"
+                    onClick={() => setShowPin(!showPin)}
+                  >
+                    {showPin ? <Eye size={20} /> : <EyeOff size={20} />}
+                  </button>
+                </div>
               </div>
               <div className="flex flex-col gap-2 mb-4 text-sm sm:text-base">
                 <a
-                  href="/rescue"
+                  href="/auth/rescue"
                   className="underline text-contrast hover:text-accent transition-colors"
                 >
                   Forgot your password?
                 </a>
                 <a
-                  href="/register"
+                  href="/auth/register"
                   className="underline text-contrast hover:text-accent transition-colors"
                 >
                   Create an account

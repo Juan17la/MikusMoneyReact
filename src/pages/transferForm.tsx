@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { transfer } from "../api/transactionsService";
+import { Eye, EyeOff } from "lucide-react";
 import mikusTransferMoney from "../assets/mikuTransfersMoney.png";
 
 export default function WithdrawForm() {
@@ -184,10 +185,10 @@ export default function WithdrawForm() {
                       />
                       <button
                         type="button"
-                        className="absolute right-4 text-contrast/60 hover:text-contrast transition-colors text-sm font-bold"
+                        className="absolute right-4 text-contrast/60 hover:text-contrast transition-colors"
                         onClick={() => setShowPin(!showPin)}
                       >
-                        {showPin ? "HIDE" : "SHOW"}
+                        {showPin ? <Eye size={20} /> : <EyeOff size={20} />}
                       </button>
                     </div>
                   </div>

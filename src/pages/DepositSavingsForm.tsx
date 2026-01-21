@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { saveSavingPigs, getSavingsPigs } from "../api/savingsPigService";
+import { Eye, EyeOff } from "lucide-react";
 import mikusMoney from "../assets/mikusMoney.png";
 
 interface SavingsPig {
@@ -230,10 +231,10 @@ export default function DepositSavingsForm() {
                         />
                         <button
                           type="button"
-                          className="absolute right-4 text-contrast/60 hover:text-contrast transition-colors text-sm font-bold"
+                          className="absolute right-4 text-contrast/60 hover:text-contrast transition-colors"
                           onClick={() => setShowPin(!showPin)}
                         >
-                          {showPin ? "HIDE" : "SHOW"}
+                          {showPin ? <Eye size={20} /> : <EyeOff size={20} />}
                         </button>
                       </div>
                     </div>

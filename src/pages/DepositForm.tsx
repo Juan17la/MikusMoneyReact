@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { deposit } from "../api/transactionsService";
+import { Eye, EyeOff } from "lucide-react";
 import mikusMoney from "../assets/mikusMoney.png";
 
 export default function DepositForm() {
@@ -146,10 +147,10 @@ export default function DepositForm() {
                       />
                       <button
                         type="button"
-                        className="absolute right-4 text-contrast/60 hover:text-contrast transition-colors text-sm font-bold"
+                        className="absolute right-4 text-contrast/60 hover:text-contrast transition-colors"
                         onClick={() => setShowPin(!showPin)}
                       >
-                        {showPin ? "HIDE" : "SHOW"}
+                        {showPin ? <Eye size={20} /> : <EyeOff size={20} />}
                       </button>
                     </div>
                   </div>

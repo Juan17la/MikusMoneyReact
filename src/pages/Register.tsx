@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router";
 import { register } from "../api/authenticationService";
+import { Eye, EyeOff } from "lucide-react";
 import mikusLoginSticker from "../assets/mikusLoginSticker.png";
 
 export default function Register() {
@@ -266,7 +267,7 @@ export default function Register() {
                         className="absolute right-3 text-contrast/60 hover:text-contrast transition-colors"
                         onClick={() => setShowPin(!showPin)}
                       >
-                        {showPin ? "O" : "X"}
+                        {showPin ? <Eye size={20} /> : <EyeOff size={20} />}
                       </button>
                     </div>
                   </div>
@@ -297,7 +298,7 @@ export default function Register() {
                         className="absolute right-3 text-contrast/60 hover:text-contrast transition-colors"
                         onClick={() => setShowPin(!showPin)}
                       >
-                        {showPin ? "O" : "X"}
+                        {showPin ? <Eye size={20} /> : <EyeOff size={20} />}
                       </button>
                     </div>
                   </div>
@@ -328,7 +329,7 @@ export default function Register() {
                         className="absolute right-3 text-contrast/60 hover:text-contrast transition-colors"
                         onClick={() => setShowPassword(!showPassword)}
                       >
-                        {showPassword ? "O" : "X"}
+                        {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                       </button>
                     </div>
                   </div>
@@ -361,7 +362,7 @@ export default function Register() {
                         className="absolute right-3 text-contrast/60 hover:text-contrast transition-colors"
                         onClick={() => setShowPassword(!showPassword)}
                       >
-                        {showPassword ? "O" : "X"}
+                        {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                       </button>
                     </div>
                   </div>
