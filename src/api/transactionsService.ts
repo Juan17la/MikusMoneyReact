@@ -8,7 +8,7 @@ export function deposit(amount: number, pinCode: string) {
     }
     return axiosInstance.post("/transactions/deposit", requestBody, {
         headers: {
-            'Idempotency-Key': crypto.randomUUID(),
+            'X-Idempotency-Key': crypto.randomUUID(),
         }
     });
 }
@@ -20,7 +20,7 @@ export function withdraw(amount: number, pinCode: string) {
     }
     return axiosInstance.post("/transactions/withdraw", requestBody, {
         headers: {
-            'Idempotency-Key': crypto.randomUUID(),
+            'X-Idempotency-Key': crypto.randomUUID(),
         }
     });
 }
@@ -31,9 +31,9 @@ export function transfer(amount: number, receiverPublicCode: string, pinCode: st
         receiverPublicCode, 
         pinCode,
     }
-    return axiosInstance.post("/transactions/send", requestBody, {
+    return axiosInstance.post("/transactions/transfer", requestBody, {
         headers: {
-            'Idempotency-Key': crypto.randomUUID(),
+            'X-Idempotency-Key': crypto.randomUUID(),
         }
     });
 }

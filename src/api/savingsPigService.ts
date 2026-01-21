@@ -1,7 +1,7 @@
 import axiosInstance from "./axiosInstance";
 
 export async function getSavingsPigs() {
-  const response = await axiosInstance.get("/savings/pig/all");
+  const response = await axiosInstance.get("/savings-pigs/active");
   return response.data;
 }
 
@@ -11,7 +11,7 @@ export function createSavingsPig(nameGoal: string, goal: number) {
     goal,
   };
 
-  return axiosInstance.post(`/savings/pig/create`, requestBody);
+  return axiosInstance.post(`/savings-pigs`, requestBody);
 }
 
 export function saveSavingPigs(amount: number, pinCode: string, id:number) {
@@ -19,7 +19,7 @@ export function saveSavingPigs(amount: number, pinCode: string, id:number) {
         amount,
         pinCode,
     }
-    return axiosInstance.post(`/savings/pig/${id}/save`, requestBody);
+    return axiosInstance.post(`/savings-pigs/${id}/deposit`, requestBody);
 }
 
 export function breakSavingPigs(amount: number, pinCode: string, id:number) {
@@ -27,5 +27,5 @@ export function breakSavingPigs(amount: number, pinCode: string, id:number) {
         amount,
         pinCode,
     }
-    return axiosInstance.post(`/savings/pig/${id}/break`, requestBody);
+    return axiosInstance.post(`/savings-pigs/${id}/break`, requestBody);
 }
