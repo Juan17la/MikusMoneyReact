@@ -1,4 +1,4 @@
-export type TransactionType = "SEND" | "WITHDRAW" | "DEPOSIT";
+export type TransactionType = "TRANSFER" | "WITHDRAW" | "DEPOSIT";
 
 export interface Transaction {
   id: number;
