@@ -30,7 +30,6 @@ export function Navbar() {
 
   const navItems: navItemProps[] = [
     { itemName: "Account", itemLink: "/account" },
-    { itemName: "Transactions", itemLink: "/transactions" },
     { itemName: "Savings", itemLink: "/savings" },
   ];
 

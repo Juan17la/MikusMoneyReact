@@ -15,7 +15,7 @@ export default function TransactionsWidget({ transaction }: TransactionWidgetPro
     };
 
     const getTransactionLabel = () => {
-        if (transaction.transactionType === 'SEND') {
+        if (transaction.transactionType === 'TRANSFER') {
             return `Sent To ${transaction.to}`;
         } else if (transaction.transactionType === 'DEPOSIT') {
             return 'Deposit';
