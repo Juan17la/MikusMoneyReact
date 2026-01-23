@@ -7,7 +7,7 @@ export default function TransactionsNotFoundWidget() {
         <img
           src={mikusNotFound}
           alt="sticker here"
-          className="w-25 h-25 mb-4"
+          className="w-25 h-25 mb-4 opacity-80"
           loading="lazy"
         />
         <h2>No Transactions Found</h2>
