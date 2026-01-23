@@ -116,9 +116,6 @@ export default function WithdrawForm() {
                         required
                       />
                     </div>
-                    <p className="text-xs text-contrast/40 mt-1">
-                      Maximum withdrawal: $10,000
-                    </p>
                   </div>
                 </>
               ) : (

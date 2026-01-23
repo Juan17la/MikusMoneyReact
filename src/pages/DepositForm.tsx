@@ -116,9 +116,6 @@ export default function DepositForm() {
                         required
                       />
                     </div>
-                    <p className="text-xs text-contrast/40 mt-1">
-                      Maximum deposit: $10,000
-                    </p>
                   </div>
                 </>
               ) : (

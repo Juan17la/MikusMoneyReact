@@ -117,9 +117,6 @@ export default function WithdrawForm() {
                         required
                       />
                     </div>
-                    <p className="text-xs text-contrast/40 mt-1">
-                      Maximum transfer: $10,000
-                    </p>
                   </div>
 
                   <div className="space-y-2">
