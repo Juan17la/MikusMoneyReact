@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getSavingsPigs, breakSavingPigs } from "../api/savingsPigService";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { PiggyBank, Music, Music2, Music4 } from "lucide-react";
 
 interface SavingsPig {
   id: number;
@@ -121,7 +122,7 @@ export default function Savings() {
     <MainLayout>
       {/* Left: Visual representation */}
       <aside
-        className="md:flex md:col-span-2 bg-linear-to-br from-white-2 to-black-8 border-2 border-accent-alpha flex items-center justify-center rounded-sm h-96 md:h-auto"
+        className="md:flex md:col-span-2 bg-linear-to-br from-white-2 to-black-8 border-2 border-accent-alpha flex items-center justify-center rounded-sm h-96 md:h-auto w-full"
         aria-hidden="false"
       >
         <div className="w-full h-full flex items-center justify-center flex-col gap-4 p-4">
@@ -163,9 +164,21 @@ export default function Savings() {
 
         {/* Main Savings Display Card */}
         <section
-          className="bg-linear-to-b from-white-2 to-black-12 rounded-xl shadow-card border border-white-3 p-6 text-contrast flex flex-col justify-between"
+          className="relative overflow-hidden bg-linear-to-b from-white-2 to-black-12 rounded-xl shadow-card border border-white-3 p-6 text-contrast flex flex-col justify-between group"
           aria-labelledby="pig-name-heading"
         >
+          {/* Background Decorations */}
+          <div className="absolute -top-12.5 -right-12.5 w-64 h-64 bg-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute -bottom-5 -left-5 w-40 h-40 bg-accent-weak/5 rounded-full blur-2xl pointer-events-none"></div>
+          
+          <svg className="absolute top-0 right-0 w-full h-full opacity-[0.03] pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+            <pattern id="circuit-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M0 20h40M20 0v40" stroke="currentColor" strokeWidth="1" />
+              <circle cx="20" cy="20" r="2" fill="currentColor" />
+            </pattern>
+            <rect width="100%" height="100%" fill="url(#circuit-pattern)" />
+          </svg>
+
           {isLoadingSavings ? (
             <div className="text-center py-8">
               <p className="text-accent opacity-70">Loading...</p>
@@ -190,8 +203,8 @@ export default function Savings() {
                 )}
               </div>
 
-              {/* Savings Amount - Main Focus */}
-              <div className="mb-6 pb-6 border-b border-white-3/20">
+              {/* Savings Amount */}
+              <div className="mb-6 border-b border-white-3/20">
                 <p className="text-sm uppercase opacity-80 mb-2">Current Savings</p>
                 <div
                   className="text-5xl font-bold text-accent mb-2"
@@ -200,6 +213,41 @@ export default function Savings() {
                   ${selectedPig.savedMoney.toFixed(2)}
                 </div>
                 <p className="text-xs opacity-70">Target: ${selectedPig.goal.toFixed(2)}</p>
+              </div>
+              
+              {/* Savings pig svg decoration */}
+              <div className="w-full mb-6 flex justify-center relative z-10 py-10 h-48 items-center overflow-hidden shadow-card border border-white-3 rounded-md">
+                {/* Falling Music Notes */}
+                <div className="absolute inset-x-0 -top-4 bottom-0 pointer-events-none">
+                  {[...Array(6)].map((_, i) => {
+                    const Icon = [Music, Music2, Music4][i % 3];
+                    return (
+                      <div 
+                        key={i}
+                        className="absolute text-accent/20 animate-fall"
+                        style={{
+                          left: `${15 + Math.random() * 70}%`,
+                          animationDuration: `${3 + Math.random() * 4}s`,
+                          animationDelay: `${Math.random() * 5}s`,
+                          fontSize: `${10 + Math.random() * 20}px`
+                        }}
+                      >
+                        <Icon size={16 + Math.random() * 12} />
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Softly Floating Pig Icon */}
+                <div className="relative z-20 animate-float text-accent drop-shadow-[0_0_15px_rgba(57,230,216,0.5)]">
+                  <div className="absolute inset-0 blur-2xl bg-accent/20 rounded-full animate-pulse"></div>
+                  <PiggyBank size={120} strokeWidth={1.5} />
+                  
+                  {/* Small decorative elements around pig */}
+                  <div className="absolute -top-4 -right-2 text-accent-weak animate-[bounce_3s_infinite]">
+                    <Music size={24} />
+                  </div>
+                </div>
               </div>
 
               {/* Progress Visualization */}
