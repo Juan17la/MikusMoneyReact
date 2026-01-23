@@ -122,7 +122,7 @@ export default function Home() {
           </h3>
           <div
             id="component-list-transactions"
-            className="bg-linear-to-b from-white-1 to-black-8 rounded-sm p-3 border border-white-3 min-h-23 max-h-88 flex flex-col justify-start mb-2 text-white/45 overflow-y-auto gap-3 relative shadow-inset-y"
+            className="bg-linear-to-b from-white-1 to-black-8 rounded-sm p-3 border border-white-3 min-h-88 max-h-88 flex flex-col justify-start mb-2 text-white/45 overflow-y-auto gap-3 relative shadow-inset-y"
             role="region"
             aria-live="polite"
           >
