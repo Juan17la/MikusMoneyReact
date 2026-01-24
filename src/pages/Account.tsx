@@ -46,7 +46,7 @@ export default function Home() {
           <img
             src={portraitImage}
             alt="Portrait"
-            className="object-cover w-full h-full rounded-sm"
+            className="object-cover w-full h-full rounded-xs"
             loading="lazy"
           />
         </div>
