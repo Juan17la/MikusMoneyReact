@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { PiggyBank, Music, Music2, Music4 } from "lucide-react";
 
+import portraitImage from "../assets/portrait.jpg";
+
 interface SavingsPig {
   id: number;
   savedMoney: number;
@@ -40,14 +42,12 @@ export default function Savings() {
   const [breakError, setBreakError] = useState("");
   const [isBreaking, setIsBreaking] = useState(false);
 
-  // Set the first pig as selected when data loads
   useEffect(() => {
     if (dataSavings && dataSavings.length > 0 && selectedPigId === null) {
       setSelectedPigId(dataSavings[0].id);
     }
   }, [dataSavings, selectedPigId]);
 
-  // Update selected pig when selectedPigId changes
   useEffect(() => {
     if (dataSavings && selectedPigId !== null) {
       const pig = dataSavings.find((p: SavingsPig) => p.id === selectedPigId);
@@ -60,7 +60,6 @@ export default function Savings() {
     setSelectedPigId(pigId);
   };
 
-  // Calculate progress percentage
   const progressPercentage = selectedPig
     ? Math.round((selectedPig.savedMoney / selectedPig.goal) * 100)
     : 0;
@@ -69,7 +68,6 @@ export default function Savings() {
     ? selectedPig.goal - selectedPig.savedMoney
     : 0;
 
-  // Format date
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -102,7 +100,6 @@ export default function Savings() {
       setShowBreakModal(false);
       setPin("");
       refetchSavings();
-      // Navigate to account page after successful break
       navigate("/account");
     } catch (err: any) {
       const backendMessage = err?.response?.data?.message;
@@ -125,18 +122,18 @@ export default function Savings() {
         className="md:flex md:col-span-2 bg-linear-to-br from-white-2 to-black-8 border-2 border-accent-alpha flex items-center justify-center rounded-sm h-96 md:h-auto w-full"
         aria-hidden="false"
       >
-        <div className="w-full h-full flex items-center justify-center flex-col gap-4 p-4">
+        <div className="w-full h-full flex items-center justify-center flex-col gap-4">
           <img
-            src="https://i.pinimg.com/736x/e4/f8/0d/e4f80d853d9919aca7795efed72a98f6.jpg"
+            src="https://i.pinimg.com/1200x/32/81/10/328110d05ad4260ed494358880657d5a.jpg"
             alt="Portrait"
-            className="object-cover w-full h-full rounded-sm opacity-70"
+            className="object-cover w-full h-full rounded-xs opacity-65"
             loading="lazy"
           />
         </div>
       </aside>
 
       {/* Right: main control panel (wider) */}
-      <main className="md:col-span-2 flex flex-col gap-6">
+      <main className="md:col-span-2 flex flex-col gap-4 max-w-full">
         {/* Pig Selector */}
         <section className="flex flex-col gap-2">
           <label
@@ -216,37 +213,85 @@ export default function Savings() {
               </div>
               
               {/* Savings pig svg decoration */}
-              <div className="w-full mb-6 flex justify-center relative z-10 py-10 h-48 items-center overflow-hidden shadow-card border border-white-3 rounded-md">
-                {/* Falling Music Notes */}
-                <div className="absolute inset-x-0 -top-4 bottom-0 pointer-events-none">
-                  {[...Array(6)].map((_, i) => {
-                    const Icon = [Music, Music2, Music4][i % 3];
-                    return (
+              <div className="w-full mb-6 flex justify-center relative z-10 py-10 h-48 items-center overflow-hidden shadow-card border border-accent/40 rounded-md bg-linear-to-b from-black/30 to-black/50">
+                {/* Floating Zzz - Only show when goal is NOT reached */}
+                {progressPercentage < 100 && (
+                  <div className="absolute inset-0 pointer-events-none">
+                    {[...Array(3)].map((_, i) => (
                       <div 
                         key={i}
-                        className="absolute text-accent/20 animate-fall"
+                        className="absolute text-accent/20 font-bold animate-fall"
                         style={{
-                          left: `${15 + Math.random() * 70}%`,
-                          animationDuration: `${3 + Math.random() * 4}s`,
-                          animationDelay: `${Math.random() * 5}s`,
-                          fontSize: `${10 + Math.random() * 20}px`
+                          left: `${20 + Math.random() * 60}%`,
+                          animationDuration: `${4 + Math.random() * 3}s`,
+                          animationDelay: `${Math.random() * 4}s`,
+                          fontSize: `${16 + i * 4}px`
                         }}
                       >
-                        <Icon size={16 + Math.random() * 12} />
+                        Zzz
                       </div>
-                    );
-                  })}
-                </div>
+                    ))}
+                  </div>
+                )}
 
-                {/* Softly Floating Pig Icon */}
-                <div className="relative z-20 animate-float text-accent drop-shadow-[0_0_15px_rgba(57,230,216,0.5)]">
-                  <div className="absolute inset-0 blur-2xl bg-accent/20 rounded-full animate-pulse"></div>
+                {/* Falling Music Notes & Dollar Signs - Only show when goal is reached (100%) */}
+                {progressPercentage >= 100 && (
+                  <div className="absolute inset-0 pointer-events-none">
+                    {[...Array(5)].map((_, i) => {
+                      const Icon = [Music, Music2, Music4][i % 3];
+                      return (
+                        <div 
+                          key={`music-${i}`}
+                          className="absolute text-accent/30 animate-fall"
+                          style={{
+                            left: `${5 + Math.random() * 90}%`,
+                            animationDuration: `${2.5 + Math.random() * 3.5}s`,
+                            animationDelay: `${Math.random() * 5}s`,
+                            fontSize: `${12 + Math.random() * 18}px`
+                          }}
+                        >
+                          <Icon size={18 + Math.random() * 14} />
+                        </div>
+                      );
+                    })}
+                    {/* Dollar signs falling */}
+                    {[...Array(8)].map((_, i) => (
+                      <div 
+                        key={`dollar-${i}`}
+                        className="absolute text-accent-weak/40 font-bold animate-fall"
+                        style={{
+                          left: `${10 + Math.random() * 80}%`,
+                          animationDuration: `${3 + Math.random() * 4}s`,
+                          animationDelay: `${Math.random() * 5}s`,
+                          fontSize: `${14 + Math.random() * 20}px`
+                        }}
+                      >
+                        $
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Pig Icon - Animated when goal reached, static otherwise */}
+                <div className={`relative z-20 text-accent drop-shadow-[0_0_15px_rgba(57,230,216,0.5)] ${
+                  progressPercentage >= 100 ? 'animate-float' : ''
+                }`}>
+                  {progressPercentage >= 100 && (
+                    <div className="absolute inset-0 blur-2xl bg-accent/20 rounded-full animate-pulse"></div>
+                  )}
                   <PiggyBank size={120} strokeWidth={1.5} />
                   
-                  {/* Small decorative elements around pig */}
-                  <div className="absolute -top-4 -right-2 text-accent-weak animate-[bounce_3s_infinite]">
-                    <Music size={24} />
-                  </div>
+                  {/* Small decorative elements around pig - Only when goal reached */}
+                  {progressPercentage >= 100 && (
+                    <>
+                      <div className="absolute -top-4 -right-2 text-accent-weak animate-[bounce_3s_infinite]">
+                        <Music size={24} />
+                      </div>
+                      <div className="absolute -bottom-2 -left-3 text-accent-weak animate-[bounce_3.5s_infinite_0.5s]">
+                        <Music2 size={20} />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
