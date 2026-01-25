@@ -6,8 +6,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { PiggyBank, Music, Music2, Music4 } from "lucide-react";
 
-import portraitImage from "../assets/portrait.jpg";
-
 interface SavingsPig {
   id: number;
   savedMoney: number;
