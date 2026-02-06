@@ -317,6 +317,8 @@ export default function Register() {
                       <input
                         className="w-full px-3.5 py-2.5 rounded-sm bg-linear-to-b from-black-30 to-black-15 text-contrast font-[inherit] text-sm border border-white-8 shadow-inner transition-all duration-200 outline-none focus:border-accent focus:shadow-focus focus:bg-linear-to-b focus:from-black-35 focus:to-black-20 placeholder:text-contrast/40 placeholder:italic sm:text-base pr-10"
                         type={showPassword ? "text" : "password"}
+                        minLength={8}
+                        maxLength={100}
                         name="input-password"
                         id="input-password"
                         placeholder="Password"
